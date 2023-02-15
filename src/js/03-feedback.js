@@ -6,7 +6,12 @@ const handleInputData = ({ target }) => {
   localStorage.setItem('feedback-form-state', JSON.stringify(formData));
 };
 if (localStorage.getItem('feedback-form-state')) {
-  formData = JSON.parse(localStorage.getItem('feedback-form-state'));
+  try {
+    formData = JSON.parse(localStorage.getItem('feedback-form-state'));
+  } catch (error) {
+    console.log(error.name);
+    console.log(error.message);
+  }
   for (let data in formData) {
     feedbackForm.elements[data].value = formData[data];
   }
