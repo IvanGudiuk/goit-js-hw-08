@@ -1,11 +1,10 @@
-import Player from "@vimeo/player";
-const throttle = require("lodash.throttle");
-const videoPlayer = document.getElementById("vimeo-player");
-const playerVimeo = new Player(videoPlayer);
-const handlePlayerDuration = ({ duration, percent, seconds }) => {
-  const playedTime = seconds;
-  localStorage.setItem("videoplayer-current-time", playedTime);
+import Player from '@vimeo/player';
+import Throttle from 'lodash.throttle';
+const videoPlayer = document.getElementById('vimeo-player');
+const vimeo = new Player(videoPlayer);
+const handlePlayerStop = ({ duration, percent, seconds }) => {
+  localStorage.setItem('videoplayer-current-time', seconds);
 };
-playerVimeo.on("timeupdate", throttle(handlePlayerDuration, 1000));
-const breakPoint = localStorage.getItem("videoplayer-current-time");
-playerVimeo.setCurrentTime(breakPoint);
+vimeo.on('timeupdate', Throttle(handlePlayerStop, 1000));
+const breakPoint = localStorage.getItem('videoplayer-current-time');
+vimeo.setCurrentTime(breakPoint);

@@ -1,13 +1,15 @@
-const throttle = require('lodash.throttle');
+import Throttle from 'lodash.throttle';
 const feedbackForm = document.querySelector('.feedback-form');
 let formData = {};
+const FORM_DATA_KEY = 'feedback-form-state';
+const STORAGE = localStorage;
 const handleInputData = ({ target }) => {
   formData[target.name] = target.value;
-  localStorage.setItem('feedback-form-state', JSON.stringify(formData));
+  STORAGE.setItem(FORM_DATA_KEY, JSON.stringify(formData));
 };
-if (localStorage.getItem('feedback-form-state')) {
+if (STORAGE.getItem(FORM_DATA_KEY)) {
   try {
-    formData = JSON.parse(localStorage.getItem('feedback-form-state'));
+    formData = JSON.parse(STORAGE.getItem(FORM_DATA_KEY));
   } catch (error) {
     console.log(error.name);
     console.log(error.message);
@@ -21,7 +23,8 @@ const handleFormSubmit = e => {
   console.log(formData);
   localStorage.removeItem('feedback-form-state');
   feedbackForm.reset();
+  formData = {};
 };
 
-feedbackForm.addEventListener('input', throttle(handleInputData, 500));
+feedbackForm.addEventListener('input', Throttle(handleInputData, 500));
 feedbackForm.addEventListener('submit', handleFormSubmit);
